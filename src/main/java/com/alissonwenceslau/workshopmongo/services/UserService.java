@@ -36,9 +36,24 @@ public class UserService {
 		findById(id);
 		repository.deleteById(id);
 	}
-	
+	//O 'User obj' são os dados que o usuário enviará na requisição
+	public User update(User obj) {
+		//Busca o objeto original no banco
+		Optional<User> newObj = repository.findById(obj.getId());
+		
+		//Método responsável por copiar os dados do parâmeto 'obj' para o 'newObj'
+		updateData(newObj, obj);
+		
+		return repository.save(newObj.get());
+	}
+
+	private void updateData(Optional<User> newObj, User obj) {
+		newObj.get().setName(obj.getName());
+		newObj.get().setEmail(obj.getEmail());
+		
+	}
+
 	public User fromDTO(UserDTO obj) {
 		return new User(obj.getId(), obj.getName(), obj.getEmail());
 	}
-
 }
